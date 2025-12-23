@@ -63,48 +63,6 @@
 
   <div class="ticket" id="ticketsContainer"></div>
 
-  <div class="ticket">
-    <h3>Add a new play (easy to add more tickets)</h3>
-    <div class="add-form">
-      <div style="min-width:220px">
-        <div class="small">Ticket ID (message link or name)</div>
-        <input id="addTicketId" type="text" placeholder="e.g. https://teams.../1766429202766" style="width:100%" />
-      </div>
-
-      <div style="width:70px">
-        <div class="small">Label</div>
-        <input id="addLabel" type="text" placeholder="A" />
-      </div>
-
-      <div style="min-width:220px">
-        <div class="small">White numbers (5) comma/space</div>
-        <input id="addWhites" type="text" placeholder="e.g. 7,9,15,44,49" style="width:100%" />
-      </div>
-
-      <div style="width:90px">
-        <div class="small">Powerball</div>
-        <input id="addPB" type="number" min="1" max="99" placeholder="16" />
-      </div>
-
-      <div>
-        <div style="height:24px"></div>
-        <button id="addPlayBtn">Add Play</button>
-      </div>
-    </div>
-    <div class="hint">Tip: to add multiple plays for the same ticket, repeat with the same Ticket ID.</div>
-  </div>
-
-  <div class="ticket">
-    <h3>Import / Export Tickets (JSON)</h3>
-    <textarea id="importExport" class="import-area" placeholder="Paste JSON here to import, or press Export to copy current tickets as JSON"></textarea>
-    <div style="margin-top:8px">
-      <button id="importBtn" class="secondary">Import JSON</button>
-      <button id="exportBtn">Export JSON</button>
-      <button id="resetBtn" class="secondary">Reset to initial tickets</button>
-    </div>
-    <div class="hint">JSON structure: an array of tickets: [{ id: 'ticketId', plays: [{label:'A', whites:[..], pb:16}, ...] }, ... ]</div>
-  </div>
-
   <footer>Created for quick checking — numbers are stored locally only.</footer>
 
 <script>
@@ -292,39 +250,7 @@ function renderTickets(){
     table.appendChild(tbody);
     div.appendChild(table);
 
-    // small actions to the ticket
-    const actions = document.createElement('div');
-    actions.style.marginTop='8px';
-    actions.innerHTML = `<button data-ticket="${ti}" class="exportTicketBtn secondary">Export ticket JSON</button> <button data-ticket="${ti}" class="deleteTicketBtn secondary">Delete ticket</button> <button data-ticket="${ti}" class="clearTicketBtn secondary">Clear plays</button>`;
-    div.appendChild(actions);
-
     container.appendChild(div);
-  });
-
-  // attach handlers for per-ticket buttons
-  document.querySelectorAll('.deleteTicketBtn').forEach(btn=>{
-    btn.onclick = (e) => {
-      const idx = Number(e.target.dataset.ticket);
-      if(!confirm('Delete entire ticket?')) return;
-      tickets.splice(idx,1);
-      saveTickets(tickets); renderTickets();
-    };
-  });
-  document.querySelectorAll('.clearTicketBtn').forEach(btn=>{
-    btn.onclick = (e) => {
-      const idx = Number(e.target.dataset.ticket);
-      if(!confirm('Remove all plays from this ticket?')) return;
-      tickets[idx].plays = [];
-      saveTickets(tickets); renderTickets();
-    };
-  });
-  document.querySelectorAll('.exportTicketBtn').forEach(btn=>{
-    btn.onclick = (e) => {
-      const idx = Number(e.target.dataset.ticket);
-      const txt = JSON.stringify(tickets[idx], null, 2);
-      document.getElementById('importExport').value = txt;
-      alert('Ticket JSON placed in the Import / Export box below.');
-    };
   });
 }
 
@@ -421,75 +347,9 @@ function clearMatches(){
   });
 }
 
-/* Add play */
-function addPlayFromForm(){
-  const tid = document.getElementById('addTicketId').value.trim() || 'Unnamed ticket';
-  const label = document.getElementById('addLabel').value.trim() || 'A';
-  const whitesStr = document.getElementById('addWhites').value.trim();
-  const pb = parseInt(document.getElementById('addPB').value,10);
-  const whites = parseNumbersList(whitesStr);
-  if(whites.length !== 5 || whites.some(n=>isNaN(n))){
-    alert('Please enter exactly 5 white numbers for the new play.');
-    return;
-  }
-  if(isNaN(pb)){
-    alert('Please enter a Powerball number for the new play.');
-    return;
-  }
-  // find ticket, or create
-  let t = tickets.find(x => x.id === tid);
-  if(!t){
-    t = { id: tid, plays: [] };
-    tickets.push(t);
-  }
-  t.plays.push({ label: label, whites: whites, pb: pb });
-  saveTickets(tickets);
-  renderTickets();
-  clearAddForm();
-}
-
-/* helpers: export/import */
-function exportJSON(){
-  document.getElementById('importExport').value = JSON.stringify(tickets, null, 2);
-}
-function importJSON(){
-  const txt = document.getElementById('importExport').value.trim();
-  if(!txt){
-    alert('Paste JSON into the box first.');
-    return;
-  }
-  try{
-    const parsed = JSON.parse(txt);
-    if(!Array.isArray(parsed)) throw new Error('Expected an array of tickets.');
-    tickets = parsed;
-    saveTickets(tickets);
-    renderTickets();
-    alert('Imported successfully.');
-  }catch(e){
-    alert('Import failed: ' + e.message);
-  }
-}
-function resetInitial(){
-  if(!confirm('Reset to the initial provided tickets (this will overwrite local changes)?')) return;
-  tickets = JSON.parse(JSON.stringify(INITIAL_TICKETS));
-  saveTickets(tickets);
-  renderTickets();
-  document.getElementById('importExport').value = '';
-}
-
 /* UI wiring */
 document.getElementById('checkBtn').addEventListener('click', checkAll);
 document.getElementById('clearMatches').addEventListener('click', () => { clearMatches(); });
-document.getElementById('addPlayBtn').addEventListener('click', addPlayFromForm);
-document.getElementById('exportBtn').addEventListener('click', exportJSON);
-document.getElementById('importBtn').addEventListener('click', importJSON);
-document.getElementById('resetBtn').addEventListener('click', resetInitial);
-
-function clearAddForm(){
-  document.getElementById('addLabel').value = '';
-  document.getElementById('addWhites').value = '';
-  document.getElementById('addPB').value = '';
-}
 
 /* initial render */
 renderTickets();
