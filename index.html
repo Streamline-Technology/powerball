@@ -50,25 +50,32 @@
     }
 
     .tickets {
-      margin-top: 16px
+      margin-top: 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 12px;
     }
 
     .ticket {
       border: 1px solid #e1e6ee;
       background: #fff;
-      padding: 10px;
+      /* padding: 10px; */
       border-radius: 8px;
-      margin-bottom: 12px
+      margin-bottom: 12px;
+      margin-right: 12px;
+      display: inline-block;
     }
 
     .ticket h3 {
-      margin: 0 0 8px;
+      margin: 8px 0 8px 8px;
       font-size: 15px
     }
 
     table {
-      width: 100%;
-      border-collapse: collapse
+      width: auto;
+      border-collapse: collapse;
+      table-layout: auto;
     }
 
     th,
@@ -90,7 +97,10 @@
       padding: 4px 6px;
       border-radius: 4px;
       margin-right: 6px;
-      background: #f1f5f9
+      background: #f1f5f9;
+      min-width: 20px;
+      text-align: center;
+      min-height: 1.2em;
     }
 
     .num.matched {
@@ -104,7 +114,11 @@
       padding: 4px 6px;
       border-radius: 4px;
       background: #fde68a;
-      color: #92400e
+      color: #92400e;
+      display: inline-block;
+      min-width: 20px;
+      min-height: 1.2em;
+      text-align: center;
     }
 
     .pb.matched {
@@ -217,7 +231,7 @@
   <div class="hint">Matched white numbers are highlighted in green. Matched Powerball is highlighted in gold. Add plays
     below (they persist in this browser).</div>
 
-  <div class="ticket" id="ticketsContainer"></div>
+  <div id="ticketsContainer"></div>
 
   <script>
 
@@ -285,16 +299,16 @@
       {
         id: "Brian Hinken",
         plays: [
-          { label: "A", whites: [28,34,39,44,63], pb: 1 },
-          { label: "B", whites: [7,9,28,41,46], pb: 3 },
-          { label: "C", whites: [1,28,43,49,66], pb: 6 },
-          { label: "D", whites: [1,5,10,24,44], pb: 12 },
-          { label: "E", whites: [9,14,24,49,54], pb: 19 },
-          { label: "A", whites: [12,29,33,60,62], pb: 21 },
-          { label: "B", whites: [1,26,28,56,65], pb: 13 },
-          { label: "C", whites: [4,23,31,34,62], pb: 23 },
-          { label: "D", whites: [11,34,38,39,45], pb: 24 },
-          { label: "E", whites: [11,25,29,39,52], pb: 2 }
+          { label: "A", whites: [28, 34, 39, 44, 63], pb: 1 },
+          { label: "B", whites: [7, 9, 28, 41, 46], pb: 3 },
+          { label: "C", whites: [1, 28, 43, 49, 66], pb: 6 },
+          { label: "D", whites: [1, 5, 10, 24, 44], pb: 12 },
+          { label: "E", whites: [9, 14, 24, 49, 54], pb: 19 },
+          { label: "A", whites: [12, 29, 33, 60, 62], pb: 21 },
+          { label: "B", whites: [1, 26, 28, 56, 65], pb: 13 },
+          { label: "C", whites: [4, 23, 31, 34, 62], pb: 23 },
+          { label: "D", whites: [11, 34, 38, 39, 45], pb: 24 },
+          { label: "E", whites: [11, 25, 29, 39, 52], pb: 2 }
         ]
       },
       {
@@ -329,23 +343,10 @@
       }
     ];
 
-    /* load from localStorage or initial */
-    function loadTickets() {
-      const s = localStorage.getItem('powerball_tickets_v1');
-      if (!s) return JSON.parse(JSON.stringify(INITIAL_TICKETS));
-      try {
-        return JSON.parse(s);
-      } catch (e) {
-        return JSON.parse(JSON.stringify(INITIAL_TICKETS));
-      }
-    }
-    function saveTickets(tickets) {
-      localStorage.setItem('powerball_tickets_v1', JSON.stringify(tickets));
-    }
-
     /* helper to render */
-    let tickets = loadTickets();
+    let tickets = INITIAL_TICKETS;
     const container = document.getElementById('ticketsContainer');
+    let matchedWhites = [];
 
     function renderTickets() {
       container.innerHTML = '';
@@ -368,13 +369,14 @@
           tr.appendChild(tdLabel);
 
           const tdWhites = document.createElement('td');
-          // show whites as spans
-          p.whites.forEach(w => {
+          // Always show 5 boxes for whites
+          for (let i = 0; i < 5; i++) {
             const span = document.createElement('span');
-            span.className = 'num';
-            span.textContent = String(w).padStart(2, '0');
+            const w = p.whites[i];
+            span.className = 'num' + (w !== undefined && matchedWhites.includes(w) ? ' matched' : '');
+            span.textContent = w !== undefined ? String(w) : '\u00A0';
             tdWhites.appendChild(span);
-          });
+          }
           tr.appendChild(tdWhites);
 
           const tdPB = document.createElement('td');
@@ -448,14 +450,15 @@
 
           // update whites cell — highlight matched numbers
           const whitesCell = tr.cells[1];
-          // rebuild spans
+          // rebuild spans - always 5 boxes
           whitesCell.innerHTML = '';
-          p.whites.forEach(w => {
+          for (let i = 0; i < 5; i++) {
             const span = document.createElement('span');
-            span.className = 'num' + (matchedWhites.includes(w) ? ' matched' : '');
-            span.textContent = String(w).padStart(2, '0');
+            const w = p.whites[i];
+            span.className = 'num' + (w !== undefined && matchedWhites.includes(w) ? ' matched' : '');
+            span.textContent = w !== undefined ? String(w) : '';
             whitesCell.appendChild(span);
-          });
+          }
 
           // update pb cell highlight
           const pbCell = tr.cells[2];
@@ -505,12 +508,7 @@
     document.getElementById('checkBtn').addEventListener('click', checkAll);
     document.getElementById('clearMatches').addEventListener('click', () => { clearMatches(); });
 
-    /* initial render */
     renderTickets();
-
-    /* attempt to pre-fill sample winning numbers if you want (comment out if not) */
-    // document.getElementById('winningWhites').value = '7, 9, 15, 44, 49'; document.getElementById('winningPB').value = '16';
-
   </script>
 </body>
 
