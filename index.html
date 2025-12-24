@@ -83,7 +83,8 @@
       padding: 6px 8px;
       border-bottom: 1px solid #eee;
       text-align: left;
-      font-family: monospace
+      font-family: monospace;
+      vertical-align: middle;
     }
 
     th {
@@ -93,14 +94,16 @@
     }
 
     .num {
-      display: inline-block;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
       padding: 4px 6px;
       border-radius: 4px;
       margin-right: 6px;
       background: #f1f5f9;
       min-width: 20px;
+      height: 20px;
       text-align: center;
-      min-height: 1.2em;
     }
 
     .num.matched {
@@ -115,9 +118,11 @@
       border-radius: 4px;
       background: #fde68a;
       color: #92400e;
-      display: inline-block;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
       min-width: 20px;
-      min-height: 1.2em;
+      height: 20px;
       text-align: center;
     }
 
@@ -382,7 +387,7 @@
           const tdPB = document.createElement('td');
           const pbspan = document.createElement('span');
           pbspan.className = 'pb';
-          pbspan.textContent = (p.pb === null || p.pb === undefined) ? '' : p.pb;
+          pbspan.textContent = (p.pb === null || p.pb === undefined) ? '\u00A0' : p.pb;
           tdPB.appendChild(pbspan);
           tr.appendChild(tdPB);
 
