@@ -1,41 +1,196 @@
 <!doctype html>
 <html lang="en">
+
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Powerball Ticket Checker</title>
-<style>
-  body{font-family:system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;margin:18px;background:#f8f9fb;color:#111}
-  h1{margin:0 0 10px;font-size:20px}
-  .top{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-bottom:12px}
-  input[type="text"], input[type="number"], textarea, select {
-    font-size:14px;padding:8px;border:1px solid #ccc;border-radius:6px;
-  }
-  button{padding:8px 12px;border-radius:6px;border:0;background:#2471f3;color:#fff;cursor:pointer}
-  button.secondary{background:#6b7280}
-  .tickets{margin-top:16px}
-  .ticket{border:1px solid #e1e6ee;background:#fff;padding:10px;border-radius:8px;margin-bottom:12px}
-  .ticket h3{margin:0 0 8px;font-size:15px}
-  table{width:100%;border-collapse:collapse}
-  th,td{padding:6px 8px;border-bottom:1px solid #eee;text-align:left;font-family:monospace}
-  th{background:#fbfbfd;font-weight:600;font-size:13px}
-  .num{display:inline-block;padding:4px 6px;border-radius:4px;margin-right:6px;background:#f1f5f9}
-  .num.matched{background:#d1fae5;color:#065f46;font-weight:700}
-  .pb{font-weight:700;padding:4px 6px;border-radius:4px;background:#fde68a;color:#92400e}
-  .pb.matched{background:#fef3c7;border:2px solid #f59e0b}
-  .result{font-weight:700}
-  .match-good{color:#065f46}
-  .controls{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
-  .small{font-size:13px;color:#6b7280}
-  .import-area{width:100%;height:120px;padding:8px;margin-top:8px;border-radius:6px;border:1px solid #ddd;font-family:monospace}
-  .row{display:flex;gap:8px;align-items:center}
-  .label{width:70px;color:#374151}
-  .add-form{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:10px}
-  .hint{font-size:13px;color:#556; margin-top:6px}
-  footer{font-size:13px;color:#666;margin-top:16px}
-  @media(max-width:700px){ .label{width:100%} .add-form{flex-direction:column;align-items:stretch} .top{flex-direction:column;align-items:stretch} }
-</style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Powerball Ticket Checker</title>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial;
+      margin: 18px;
+      background: #f8f9fb;
+      color: #111
+    }
+
+    h1 {
+      margin: 0 0 10px;
+      font-size: 20px
+    }
+
+    .top {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      align-items: center;
+      margin-bottom: 12px
+    }
+
+    input[type="text"],
+    input[type="number"],
+    textarea,
+    select {
+      font-size: 14px;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+
+    button {
+      padding: 8px 12px;
+      border-radius: 6px;
+      border: 0;
+      background: #2471f3;
+      color: #fff;
+      cursor: pointer
+    }
+
+    button.secondary {
+      background: #6b7280
+    }
+
+    .tickets {
+      margin-top: 16px
+    }
+
+    .ticket {
+      border: 1px solid #e1e6ee;
+      background: #fff;
+      padding: 10px;
+      border-radius: 8px;
+      margin-bottom: 12px
+    }
+
+    .ticket h3 {
+      margin: 0 0 8px;
+      font-size: 15px
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse
+    }
+
+    th,
+    td {
+      padding: 6px 8px;
+      border-bottom: 1px solid #eee;
+      text-align: left;
+      font-family: monospace
+    }
+
+    th {
+      background: #fbfbfd;
+      font-weight: 600;
+      font-size: 13px
+    }
+
+    .num {
+      display: inline-block;
+      padding: 4px 6px;
+      border-radius: 4px;
+      margin-right: 6px;
+      background: #f1f5f9
+    }
+
+    .num.matched {
+      background: #d1fae5;
+      color: #065f46;
+      font-weight: 700
+    }
+
+    .pb {
+      font-weight: 700;
+      padding: 4px 6px;
+      border-radius: 4px;
+      background: #fde68a;
+      color: #92400e
+    }
+
+    .pb.matched {
+      background: #fef3c7;
+      border: 2px solid #f59e0b
+    }
+
+    .result {
+      font-weight: 700
+    }
+
+    .match-good {
+      color: #065f46
+    }
+
+    .controls {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      align-items: center
+    }
+
+    .small {
+      font-size: 13px;
+      color: #6b7280
+    }
+
+    .import-area {
+      width: 100%;
+      height: 120px;
+      padding: 8px;
+      margin-top: 8px;
+      border-radius: 6px;
+      border: 1px solid #ddd;
+      font-family: monospace
+    }
+
+    .row {
+      display: flex;
+      gap: 8px;
+      align-items: center
+    }
+
+    .label {
+      width: 70px;
+      color: #374151
+    }
+
+    .add-form {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      align-items: center;
+      margin-top: 10px
+    }
+
+    .hint {
+      font-size: 13px;
+      color: #556;
+      margin-top: 6px
+    }
+
+    footer {
+      font-size: 13px;
+      color: #666;
+      margin-top: 16px
+    }
+
+    @media(max-width:700px) {
+      .label {
+        width: 100%
+      }
+
+      .add-form {
+        flex-direction: column;
+        align-items: stretch
+      }
+
+      .top {
+        flex-direction: column;
+        align-items: stretch
+      }
+    }
+  </style>
 </head>
+
 <body>
   <h1>Powerball Tickets — Quick Checker</h1>
 
@@ -59,307 +214,304 @@
     </div>
   </div>
 
-  <div class="hint">Matched white numbers are highlighted in green. Matched Powerball is highlighted in gold. Add plays below (they persist in this browser).</div>
+  <div class="hint">Matched white numbers are highlighted in green. Matched Powerball is highlighted in gold. Add plays
+    below (they persist in this browser).</div>
 
   <div class="ticket" id="ticketsContainer"></div>
 
-<script>
+  <script>
 
-const INITIAL_TICKETS = [
-  {
-    id: "Scott Johnson",
-    plays: [
-      { label:"A", whites:[], pb:null },
-      { label:"B", whites:[], pb:null },
-      { label:"C", whites:[], pb:null },
-      { label:"D", whites:[], pb:null },
-      { label:"E", whites:[], pb:null },
-      { label:"F", whites:[], pb:null },
-      { label:"G", whites:[], pb:null },
-      { label:"H", whites:[], pb:null },
-      { label:"I", whites:[], pb:null },
-      { label:"J", whites:[], pb:null }
-    ]
-  },
-  {
-    id: "Matthew Scherer",
-    plays: [
-      { label:"A", whites:[], pb:null },
-      { label:"B", whites:[], pb:null },
-      { label:"C", whites:[], pb:null },
-      { label:"D", whites:[], pb:null },
-      { label:"E", whites:[], pb:null },
-      { label:"F", whites:[], pb:null },
-      { label:"G", whites:[], pb:null },
-      { label:"H", whites:[], pb:null },
-      { label:"I", whites:[], pb:null },
-      { label:"J", whites:[], pb:null }
-    ]
-  },
-  {
-    id: "Henry Erich III",
-    plays: [
-      { label:"A", whites:[], pb:null },
-      { label:"B", whites:[], pb:null },
-      { label:"C", whites:[], pb:null },
-      { label:"D", whites:[], pb:null },
-      { label:"E", whites:[], pb:null },
-      { label:"F", whites:[], pb:null },
-      { label:"G", whites:[], pb:null },
-      { label:"H", whites:[], pb:null },
-      { label:"I", whites:[], pb:null },
-      { label:"J", whites:[], pb:null }
-    ]
-  },
-  {
-    id: "Tom James",
-    plays: [
-      { label:"A", whites:[], pb:null },
-      { label:"B", whites:[], pb:null },
-      { label:"C", whites:[], pb:null },
-      { label:"D", whites:[], pb:null },
-      { label:"E", whites:[], pb:null },
-      { label:"F", whites:[], pb:null },
-      { label:"G", whites:[], pb:null },
-      { label:"H", whites:[], pb:null },
-      { label:"I", whites:[], pb:null },
-      { label:"J", whites:[], pb:null }
-    ]
-  },
-  {
-    id: "Brian Hinken",
-    plays: [
-      { label:"A", whites:[], pb:null },
-      { label:"B", whites:[], pb:null },
-      { label:"C", whites:[], pb:null },
-      { label:"D", whites:[], pb:null },
-      { label:"E", whites:[], pb:null },
-      { label:"A", whites:[], pb:null },
-      { label:"B", whites:[], pb:null },
-      { label:"C", whites:[], pb:null },
-      { label:"D", whites:[], pb:null },
-      { label:"E", whites:[], pb:null }
-    ]
-  },
-  {
-    id: "Chris White",
-    plays: [
-      { label:"A", whites:[1,4,6,18,34], pb:22 },
-      { label:"B", whites:[8,30,45,46,54], pb:1 },
-      { label:"C", whites:[12,17,20,21,43], pb:8 },
-      { label:"D", whites:[4,37,38,41,66], pb:24 },
-      { label:"E", whites:[5,18,20,39,54], pb:15 },
-      { label:"A", whites:[19,22,41,62,67], pb:12 },
-      { label:"B", whites:[13,14,16,19,27], pb:22 },
-      { label:"C", whites:[33,43,45,52,67], pb:22 },
-      { label:"D", whites:[25,26,35,52,64], pb:15 },
-      { label:"E", whites:[1,11,26,44,62], pb:24 }
-    ]
-  },
-  {
-    id: "Muthu",
-    plays: [
-      { label:"A", whites:[], pb:null },
-      { label:"B", whites:[], pb:null },
-      { label:"C", whites:[], pb:null },
-      { label:"D", whites:[], pb:null },
-      { label:"E", whites:[], pb:null },
-      { label:"F", whites:[], pb:null },
-      { label:"G", whites:[], pb:null },
-      { label:"H", whites:[], pb:null },
-      { label:"I", whites:[], pb:null },
-      { label:"J", whites:[], pb:null }
-    ]
-  }
-];
+    const INITIAL_TICKETS = [
+      {
+        id: "Scott Johnson",
+        plays: [
+          { label: "A", whites: [], pb: null },
+          { label: "B", whites: [], pb: null },
+          { label: "C", whites: [], pb: null },
+          { label: "D", whites: [], pb: null },
+          { label: "E", whites: [], pb: null },
+          { label: "F", whites: [], pb: null },
+          { label: "G", whites: [], pb: null },
+          { label: "H", whites: [], pb: null },
+          { label: "I", whites: [], pb: null },
+          { label: "J", whites: [], pb: null }
+        ]
+      },
+      {
+        id: "Matthew Scherer",
+        plays: [
+          { label: "A", whites: [], pb: null },
+          { label: "B", whites: [], pb: null },
+          { label: "C", whites: [], pb: null },
+          { label: "D", whites: [], pb: null },
+          { label: "E", whites: [], pb: null },
+          { label: "F", whites: [], pb: null },
+          { label: "G", whites: [], pb: null },
+          { label: "H", whites: [], pb: null },
+          { label: "I", whites: [], pb: null },
+          { label: "J", whites: [], pb: null }
+        ]
+      },
+      {
+        id: "Henry Erich III",
+        plays: [
+          { label: "A", whites: [], pb: null },
+          { label: "B", whites: [], pb: null },
+          { label: "C", whites: [], pb: null },
+          { label: "D", whites: [], pb: null },
+          { label: "E", whites: [], pb: null },
+          { label: "F", whites: [], pb: null },
+          { label: "G", whites: [], pb: null },
+          { label: "H", whites: [], pb: null },
+          { label: "I", whites: [], pb: null },
+          { label: "J", whites: [], pb: null }
+        ]
+      },
+      {
+        id: "Tom James",
+        plays: [
+          { label: "A", whites: [], pb: null },
+          { label: "B", whites: [], pb: null },
+          { label: "C", whites: [], pb: null },
+          { label: "D", whites: [], pb: null },
+          { label: "E", whites: [], pb: null },
+          { label: "F", whites: [], pb: null },
+          { label: "G", whites: [], pb: null },
+          { label: "H", whites: [], pb: null },
+          { label: "I", whites: [], pb: null },
+          { label: "J", whites: [], pb: null }
+        ]
+      },
+      {
+        id: "Brian Hinken",
+        plays: [
+          { label: "A", whites: [], pb: null },
+          { label: "B", whites: [], pb: null },
+          { label: "C", whites: [], pb: null },
+          { label: "D", whites: [], pb: null },
+          { label: "E", whites: [], pb: null },
+          { label: "A", whites: [], pb: null },
+          { label: "B", whites: [], pb: null },
+          { label: "C", whites: [], pb: null },
+          { label: "D", whites: [], pb: null },
+          { label: "E", whites: [], pb: null }
+        ]
+      },
+      {
+        id: "Chris White",
+        plays: [
+          { label: "A", whites: [1, 4, 6, 18, 34], pb: 22 },
+          { label: "B", whites: [8, 30, 45, 46, 54], pb: 1 },
+          { label: "C", whites: [12, 17, 20, 21, 43], pb: 8 },
+          { label: "D", whites: [4, 37, 38, 41, 66], pb: 24 },
+          { label: "E", whites: [5, 18, 20, 39, 54], pb: 15 },
+          { label: "A", whites: [19, 22, 41, 62, 67], pb: 12 },
+          { label: "B", whites: [13, 14, 16, 19, 27], pb: 22 },
+          { label: "C", whites: [33, 43, 45, 52, 67], pb: 22 },
+          { label: "D", whites: [25, 26, 35, 52, 64], pb: 15 },
+          { label: "E", whites: [1, 11, 26, 44, 62], pb: 24 }
+        ]
+      },
+      {
+        id: "Muthu",
+        plays: [
+          { label: "A", whites: [], pb: null },
+          { label: "B", whites: [], pb: null },
+          { label: "C", whites: [], pb: null },
+          { label: "D", whites: [], pb: null },
+          { label: "E", whites: [], pb: null },
+          { label: "F", whites: [], pb: null },
+          { label: "G", whites: [], pb: null },
+          { label: "H", whites: [], pb: null },
+          { label: "I", whites: [], pb: null },
+          { label: "J", whites: [], pb: null }
+        ]
+      }
+    ];
 
-/* load from localStorage or initial */
-function loadTickets(){
-  const s = localStorage.getItem('powerball_tickets_v1');
-  if(!s) return JSON.parse(JSON.stringify(INITIAL_TICKETS));
-  try{
-    return JSON.parse(s);
-  }catch(e){
-    return JSON.parse(JSON.stringify(INITIAL_TICKETS));
-  }
-}
-function saveTickets(tickets){
-  localStorage.setItem('powerball_tickets_v1', JSON.stringify(tickets));
-}
+    /* load from localStorage or initial */
+    function loadTickets() {
+      const s = localStorage.getItem('powerball_tickets_v1');
+      if (!s) return JSON.parse(JSON.stringify(INITIAL_TICKETS));
+      try {
+        return JSON.parse(s);
+      } catch (e) {
+        return JSON.parse(JSON.stringify(INITIAL_TICKETS));
+      }
+    }
+    function saveTickets(tickets) {
+      localStorage.setItem('powerball_tickets_v1', JSON.stringify(tickets));
+    }
 
-/* helper to render */
-let tickets = loadTickets();
-const container = document.getElementById('ticketsContainer');
+    /* helper to render */
+    let tickets = loadTickets();
+    const container = document.getElementById('ticketsContainer');
 
-function renderTickets(){
-  container.innerHTML = '';
-  tickets.forEach((t, ti) => {
-    const div = document.createElement('div');
-    div.className = 'ticket';
-    const h = document.createElement('h3');
-    h.textContent = `Ticket ${ti+1} — ${t.id || '(no id)'}`;
-    div.appendChild(h);
+    function renderTickets() {
+      container.innerHTML = '';
+      tickets.forEach((t, ti) => {
+        const div = document.createElement('div');
+        div.className = 'ticket';
+        const h = document.createElement('h3');
+        h.textContent = `Ticket ${ti + 1} — ${t.id || '(no id)'}`;
+        div.appendChild(h);
 
-    const table = document.createElement('table');
-    const thead = document.createElement('thead');
-    thead.innerHTML = '<tr><th style="width:120px">Label</th><th>Whites</th><th style="width:90px">Powerball</th><th style="width:160px">White matches</th><th style="width:120px">PB match</th><th style="width:120px">Result</th></tr>';
-    table.appendChild(thead);
-    const tbody = document.createElement('tbody');
-    t.plays.forEach((p, pi) => {
-      const tr = document.createElement('tr');
-      const tdLabel = document.createElement('td');
-      tdLabel.textContent = p.label;
-      tr.appendChild(tdLabel);
+        const table = document.createElement('table');
+        const thead = document.createElement('thead');
+        thead.innerHTML = '<tr><th style="width:120px">Label</th><th>Whites</th><th style="width:90px">Powerball</th><th style="width:160px">White matches</th><th style="width:120px">PB match</th><th style="width:120px">Result</th></tr>';
+        table.appendChild(thead);
+        const tbody = document.createElement('tbody');
+        t.plays.forEach((p, pi) => {
+          const tr = document.createElement('tr');
+          const tdLabel = document.createElement('td');
+          tdLabel.textContent = p.label;
+          tr.appendChild(tdLabel);
 
-      const tdWhites = document.createElement('td');
-      // show whites as spans
-      p.whites.forEach(w => {
-        const span = document.createElement('span');
-        span.className = 'num';
-        span.textContent = String(w).padStart(2,'0');
-        tdWhites.appendChild(span);
+          const tdWhites = document.createElement('td');
+          // show whites as spans
+          p.whites.forEach(w => {
+            const span = document.createElement('span');
+            span.className = 'num';
+            span.textContent = String(w).padStart(2, '0');
+            tdWhites.appendChild(span);
+          });
+          tr.appendChild(tdWhites);
+
+          const tdPB = document.createElement('td');
+          const pbspan = document.createElement('span');
+          pbspan.className = 'pb';
+          pbspan.textContent = (p.pb === null || p.pb === undefined) ? '' : p.pb;
+          tdPB.appendChild(pbspan);
+          tr.appendChild(tdPB);
+
+          const tdWhiteMatches = document.createElement('td');
+          tdWhiteMatches.className = 'small';
+          tdWhiteMatches.textContent = '-';
+          tr.appendChild(tdWhiteMatches);
+
+          const tdPBMatch = document.createElement('td');
+          tdPBMatch.className = 'small';
+          tdPBMatch.textContent = '-';
+          tr.appendChild(tdPBMatch);
+
+          const tdResult = document.createElement('td');
+          tdResult.className = 'result';
+          tdResult.textContent = '';
+          tr.appendChild(tdResult);
+
+          tbody.appendChild(tr);
+        });
+        table.appendChild(tbody);
+        div.appendChild(table);
+
+        container.appendChild(div);
       });
-      tr.appendChild(tdWhites);
+    }
 
-      const tdPB = document.createElement('td');
-      const pbspan = document.createElement('span');
-      pbspan.className = 'pb';
-      pbspan.textContent = (p.pb === null || p.pb === undefined) ? '' : p.pb;
-      tdPB.appendChild(pbspan);
-      tr.appendChild(tdPB);
+    /* utilities */
+    function parseNumbersList(str) {
+      if (!str) return [];
+      return str.split(/[, ]+/).map(s => s.trim()).filter(Boolean).map(n => parseInt(n, 10)).filter(n => !isNaN(n));
+    }
+    function uniqueSorted(arr) {
+      return Array.from(new Set(arr)).sort((a, b) => a - b);
+    }
 
-      const tdWhiteMatches = document.createElement('td');
-      tdWhiteMatches.className = 'small';
-      tdWhiteMatches.textContent = '-';
-      tr.appendChild(tdWhiteMatches);
+    /* Checking logic */
+    function checkAll() {
+      const whiteInput = document.getElementById('winningWhites').value.trim();
+      const pbInput = document.getElementById('winningPB').value.trim();
+      const whites = uniqueSorted(parseNumbersList(whiteInput)).slice(0, 5);
+      const pb = pbInput === '' ? null : parseInt(pbInput, 10);
 
-      const tdPBMatch = document.createElement('td');
-      tdPBMatch.className = 'small';
-      tdPBMatch.textContent = '-';
-      tr.appendChild(tdPBMatch);
-
-      const tdResult = document.createElement('td');
-      tdResult.className = 'result';
-      tdResult.textContent = '';
-      tr.appendChild(tdResult);
-
-      tbody.appendChild(tr);
-    });
-    table.appendChild(tbody);
-    div.appendChild(table);
-
-    container.appendChild(div);
-  });
-}
-
-/* utilities */
-function parseNumbersList(str){
-  if(!str) return [];
-  return str.split(/[, ]+/).map(s=>s.trim()).filter(Boolean).map(n=>parseInt(n,10)).filter(n=>!isNaN(n));
-}
-function uniqueSorted(arr){
-  return Array.from(new Set(arr)).sort((a,b)=>a-b);
-}
-
-/* Checking logic */
-function checkAll(){
-  const whiteInput = document.getElementById('winningWhites').value.trim();
-  const pbInput = document.getElementById('winningPB').value.trim();
-  const whites = uniqueSorted(parseNumbersList(whiteInput)).slice(0,5);
-  const pb = pbInput === '' ? null : parseInt(pbInput,10);
-
-  if(whites.length !== 5 || whites.some(n=>isNaN(n))){
-    alert('Please enter exactly 5 winning white numbers (comma or space separated).');
-    return;
-  }
-  if(pb === null || isNaN(pb)){
-    alert('Please enter a winning Powerball number.');
-    return;
-  }
-
-  // for each row in the rendered table, compute matches
-  const allTables = container.querySelectorAll('table');
-  tickets.forEach((t, ti) => {
-    const tbody = allTables[ti].querySelector('tbody');
-    t.plays.forEach((p, pi) => {
-      const tr = tbody.rows[pi];
-      // compute white matches (intersection)
-      const pSet = new Set(p.whites.map(Number));
-      const matchedWhites = whites.filter(w => pSet.has(w));
-      const matchedCount = matchedWhites.length;
-      // pb match
-      const pbMatch = (p.pb !== null && p.pb !== undefined && Number(p.pb) === pb);
-
-      // update whites cell — highlight matched numbers
-      const whitesCell = tr.cells[1];
-      // rebuild spans
-      whitesCell.innerHTML = '';
-      p.whites.forEach(w => {
-        const span = document.createElement('span');
-        span.className = 'num' + (matchedWhites.includes(w) ? ' matched' : '');
-        span.textContent = String(w).padStart(2,'0');
-        whitesCell.appendChild(span);
-      });
-
-      // update pb cell highlight
-      const pbCell = tr.cells[2];
-      const pbspan = pbCell.querySelector('.pb');
-      if(pbspan){
-        pbspan.className = 'pb' + (pbMatch ? ' matched' : '');
+      if (whites.length !== 5 || whites.some(n => isNaN(n))) {
+        alert('Please enter exactly 5 winning white numbers (comma or space separated).');
+        return;
+      }
+      if (pb === null || isNaN(pb)) {
+        alert('Please enter a winning Powerball number.');
+        return;
       }
 
-      // white matches text
-      tr.cells[3].innerHTML = (matchedCount>0 ? `${matchedCount} (${matchedWhites.join(', ')})` : '0');
+      // for each row in the rendered table, compute matches
+      const allTables = container.querySelectorAll('table');
+      tickets.forEach((t, ti) => {
+        const tbody = allTables[ti].querySelector('tbody');
+        t.plays.forEach((p, pi) => {
+          const tr = tbody.rows[pi];
+          // compute white matches (intersection)
+          const pSet = new Set(p.whites.map(Number));
+          const matchedWhites = whites.filter(w => pSet.has(w));
+          const matchedCount = matchedWhites.length;
+          // pb match
+          const pbMatch = (p.pb !== null && p.pb !== undefined && Number(p.pb) === pb);
 
-      // pb match
-      tr.cells[4].innerHTML = pbMatch ? 'YES' : 'no';
+          // update whites cell — highlight matched numbers
+          const whitesCell = tr.cells[1];
+          // rebuild spans
+          whitesCell.innerHTML = '';
+          p.whites.forEach(w => {
+            const span = document.createElement('span');
+            span.className = 'num' + (matchedWhites.includes(w) ? ' matched' : '');
+            span.textContent = String(w).padStart(2, '0');
+            whitesCell.appendChild(span);
+          });
 
-      // result summarised
-      let summary = `${matchedCount} white${matchedCount===1?'':'s'}`;
-      summary += pbMatch ? ' + PB' : '';
-      tr.cells[5].textContent = summary;
-      tr.className = ( (matchedCount >= 3) || pbMatch ) ? 'match-good' : '';
-    });
-  });
+          // update pb cell highlight
+          const pbCell = tr.cells[2];
+          const pbspan = pbCell.querySelector('.pb');
+          if (pbspan) {
+            pbspan.className = 'pb' + (pbMatch ? ' matched' : '');
+          }
 
-}
+          // white matches text
+          tr.cells[3].innerHTML = (matchedCount > 0 ? `${matchedCount} (${matchedWhites.join(', ')})` : '0');
 
-/* Clear matches view */
-function clearMatches(){
-  const allTables = container.querySelectorAll('table');
-  allTables.forEach(tbl=>{
-    const tbody = tbl.querySelector('tbody');
-    for(let r=0;r<tbody.rows.length;r++){
-      const tr = tbody.rows[r];
-      // remove matched classname on number spans
-      const whitesCell = tr.cells[1];
-      const spans = whitesCell.querySelectorAll('.num');
-      spans.forEach(s=> s.classList.remove('matched'));
-      const pbspan = tr.cells[2].querySelector('.pb');
-      if(pbspan) pbspan.classList.remove('matched');
-      tr.cells[3].textContent = '-';
-      tr.cells[4].textContent = '-';
-      tr.cells[5].textContent = '';
-      tr.className = '';
+          // pb match
+          tr.cells[4].innerHTML = pbMatch ? 'YES' : 'no';
+
+          // result summarised
+          let summary = `${matchedCount} white${matchedCount === 1 ? '' : 's'}`;
+          summary += pbMatch ? ' + PB' : '';
+          tr.cells[5].textContent = summary;
+          tr.className = ((matchedCount >= 3) || pbMatch) ? 'match-good' : '';
+        });
+      });
+
     }
-  });
-}
 
-/* UI wiring */
-document.getElementById('checkBtn').addEventListener('click', checkAll);
-document.getElementById('clearMatches').addEventListener('click', () => { clearMatches(); });
+    /* Clear matches view */
+    function clearMatches() {
+      const allTables = container.querySelectorAll('table');
+      allTables.forEach(tbl => {
+        const tbody = tbl.querySelector('tbody');
+        for (let r = 0; r < tbody.rows.length; r++) {
+          const tr = tbody.rows[r];
+          // remove matched classname on number spans
+          const whitesCell = tr.cells[1];
+          const spans = whitesCell.querySelectorAll('.num');
+          spans.forEach(s => s.classList.remove('matched'));
+          const pbspan = tr.cells[2].querySelector('.pb');
+          if (pbspan) pbspan.classList.remove('matched');
+          tr.cells[3].textContent = '-';
+          tr.cells[4].textContent = '-';
+          tr.cells[5].textContent = '';
+          tr.className = '';
+        }
+      });
+    }
 
-/* initial render */
-renderTickets();
+    /* UI wiring */
+    document.getElementById('checkBtn').addEventListener('click', checkAll);
+    document.getElementById('clearMatches').addEventListener('click', () => { clearMatches(); });
 
-/* attempt to pre-fill sample winning numbers if you want (comment out if not) */
-// document.getElementById('winningWhites').value = '7, 9, 15, 44, 49'; document.getElementById('winningPB').value = '16';
+    /* initial render */
+    renderTickets();
 
-</script>
+    /* attempt to pre-fill sample winning numbers if you want (comment out if not) */
+    // document.getElementById('winningWhites').value = '7, 9, 15, 44, 49'; document.getElementById('winningPB').value = '16';
+
+  </script>
 </body>
+
 </html>
-
-
-
-
-
